@@ -2,6 +2,8 @@ package DTO;
 
 import DAO.AnimalDAO;
 
+import java.util.List;
+
 public class Animal {
 
     private int codigo;
@@ -15,6 +17,25 @@ public class Animal {
     private String foto;
 
     public Animal(){}
+    public Animal(int codigo, String nome, String raca, int idade){
+        setCodigo(codigo);
+        setNome(nome);
+        setRaca(raca);
+        setIdade(idade);
+    }
+
+    public Animal(int codigo, int codigoAbrigo, String nome, int idade, String raca, String temperamento, String historicoSaude, String necessidadesEspeciais, String descricao, String foto) {
+        setCodigo(codigo);
+        //setCodigoAbrigo(codigo);
+        setNome(nome);
+        setIdade(idade);
+        setRaca(raca);
+        setTemperamento(temperamento);
+        setHistoricoSaude(historicoSaude);
+        setNecessidadesEspeciais(necessidadesEspeciais);
+        setDescricao(descricao);
+        setFoto(foto);
+    }
 
     public int getCodigo() {
         return codigo;
@@ -88,12 +109,38 @@ public class Animal {
         this.foto = foto;
     }
 
-
-    public Animal detalhe(){
+    public boolean criar(){
 
         AnimalDAO dao = new AnimalDAO();
+        return dao.create(this);
 
-        return dao.detalhe(5);
+    }
+
+    public List<Animal> listar(){
+
+        AnimalDAO dao = new AnimalDAO();
+        return dao.listar();
+
+    }
+
+    public Animal detalhe(int codigo){
+
+        AnimalDAO dao = new AnimalDAO();
+        return dao.detalhe(codigo);
+
+    }
+
+    public boolean atualizar(int codigo){
+
+        AnimalDAO dao = new AnimalDAO();
+        return dao.atualizar(codigo, this);
+
+    }
+
+    public boolean deletar(int codigo){
+
+        AnimalDAO dao = new AnimalDAO();
+        return dao.deletar(codigo);
 
     }
 

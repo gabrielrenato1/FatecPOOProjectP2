@@ -13,7 +13,7 @@ public class Conexao {
         try{
 
             Class.forName("com.mysql.cj.jdbc.Driver");
-            this.conexao = DriverManager.getConnection("jdbc:mysql://localhost/biblioteca", "root", "@senha123");
+            this.conexao = DriverManager.getConnection("jdbc:mysql://localhost/sistema_adocao_animais", "root", "@senha123");
 
         }catch (SQLException err){
 
