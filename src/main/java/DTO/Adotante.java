@@ -2,6 +2,8 @@ package DTO;
 
 import DAO.AdotanteDAO;
 
+//TODO: Adicionar campos Bairro e complemento
+
 public class Adotante extends User{
 
     private String preferencia;
