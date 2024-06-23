@@ -10,16 +10,16 @@ public class Adotante extends User{
 
     public Adotante(){}
 
-    public Adotante(int codigo, int nome, String email, int telefone, String estado, String cidade, String endereco, String numero, String cep) {
+    public Adotante(int codigo, String nome, String email, String telefone, String estado, String cidade, String endereco, String numero, String cep) {
         setCodigo(codigo);
-        setNome(String.valueOf(nome));
+        setNome(nome);
         setEmail(email);
         setTelefone(String.valueOf(telefone));
         setEstado(estado);
         setCidade(cidade);
         setEndereco(endereco);
         setNumero(Integer.parseInt(numero));
-        setCep(Integer.parseInt(cep));
+        setCep(cep);
     }
 
     public String getPreferencia() {
@@ -38,7 +38,6 @@ public class Adotante extends User{
     }
 
     public Adotante detalhe(int codigo){
-
         AdotanteDAO dao = new AdotanteDAO();
         return dao.detalhe(codigo);
 

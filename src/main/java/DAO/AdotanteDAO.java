@@ -33,7 +33,7 @@ public class AdotanteDAO{
                 stmt.setString(5, object.getCidade());
                 stmt.setString(6, object.getEndereco());
                 stmt.setInt(7, object.getNumero());
-                stmt.setInt(8, object.getCep());
+                stmt.setString(8, object.getCep());
 
                 success = stmt.execute();
 
@@ -61,28 +61,25 @@ public class AdotanteDAO{
 
             if(conexao.conectar()){
 
-                String sql = "SELECT * FROM adotantes WHERE codigo = ?";
+                String sql = "SELECT * FROM adotantes WHERE codigo = ? LIMIT 1";
 
                 PreparedStatement stmt = conexao.getConexao().prepareStatement(sql);
                 stmt.setInt(1, codigo);
 
                 ResultSet result = stmt.executeQuery();
+                result.next();
 
-                while(result.next()){
-
-                    adotante = new Adotante(
-                            result.getInt("codigo"),
-                            result.getInt("nome"),
-                            result.getString("email"),
-                            result.getInt("telefone"),
-                            result.getString("estado"),
-                            result.getString("cidade"),
-                            result.getString("endereco"),
-                            result.getString("numero"),
-                            result.getString("cep")
-                    );
-
-                }
+                adotante = new Adotante(
+                        result.getInt("codigo"),
+                        result.getString("nome"),
+                        result.getString("email"),
+                        result.getString("telefone"),
+                        result.getString("estado"),
+                        result.getString("cidade"),
+                        result.getString("endereco"),
+                        result.getString("numero"),
+                        result.getString("cep")
+                );
 
             }
 
@@ -106,7 +103,7 @@ public class AdotanteDAO{
 
             if(conexao.conectar()){
 
-                String sql = "UPDATE animais SET nome = ?, email = ?, telefone = ?, estado = ?, cidade = ?,"+
+                String sql = "UPDATE adotantes SET nome = ?, email = ?, telefone = ?, estado = ?, cidade = ?,"+
                         "  endereco = ?, numero = ?, cep = ? WHERE codigo = ?";
 
                 PreparedStatement stmt = conexao.getConexao().prepareStatement(sql);
@@ -118,10 +115,10 @@ public class AdotanteDAO{
                 stmt.setString(5, object.getCidade());
                 stmt.setString(6, object.getEndereco());
                 stmt.setInt(7, object.getNumero());
-                stmt.setInt(8, object.getCep());
+                stmt.setString(8, object.getCep());
                 stmt.setInt(9, codigo);
 
-                success = stmt.execute();
+                success = stmt.executeUpdate() > 0;
 
             }
 

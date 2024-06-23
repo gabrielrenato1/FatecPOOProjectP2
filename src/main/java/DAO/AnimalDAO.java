@@ -107,7 +107,7 @@ public class AnimalDAO{
 
             if(conexao.conectar()){
 
-                String sql = "SELECT * FROM animais";
+                String sql = "SELECT * FROM animais ORDER BY codigo DESC";
 
                 PreparedStatement stmt = conexao.getConexao().prepareStatement(sql);
 
@@ -116,8 +116,16 @@ public class AnimalDAO{
                 while(result.next()){
 
                     Animal animal = new Animal(
-                            result.getInt("codigo"), result.getString("nome"),
-                            result.getString("raca"), result.getInt("idade")
+                            result.getInt("codigo"),
+                            result.getInt("codigo_abrigo"),
+                            result.getString("nome"),
+                            result.getInt("idade"),
+                            result.getString("raca"),
+                            result.getString("temperamento"),
+                            result.getString("historico_saude"),
+                            result.getString("necessidades_especiais"),
+                            result.getString("descricao"),
+                            result.getString("foto")
                     );
 
                     lista.add(animal);

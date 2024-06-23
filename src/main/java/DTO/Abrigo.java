@@ -7,16 +7,21 @@ import java.util.List;
 
 public class Abrigo extends User{
 
-    public Abrigo(int codigo, int nome, String email, int telefone, String estado, String cidade, String endereco, String numero, String cep) {
+    public Abrigo(int codigo, String nome, String documento, String email, String telefone, String estado, String cidade, String endereco, int numero, String cep) {
         setCodigo(codigo);
-        setNome(String.valueOf(nome));
+        setNome(nome);
+        setDocumento(documento);
         setEmail(email);
-        setTelefone(String.valueOf(telefone));
+        setTelefone(telefone);
         setEstado(estado);
         setCidade(cidade);
         setEndereco(endereco);
-        setNumero(Integer.parseInt(numero));
-        setCep(Integer.parseInt(cep));
+        setNumero(numero);
+        setCep(cep);
+    }
+
+    public Abrigo() {
+
     }
 
     public boolean criar(){

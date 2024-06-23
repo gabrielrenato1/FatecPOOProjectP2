@@ -7,7 +7,7 @@ import java.awt.event.*;
 
 public class AnimalDetalhe extends JDialog {
     private JPanel contentPaneDetalheAnimal;
-    private JButton buttonCancel;
+    private JButton buttonAdotar;
     private JLabel lblCodigo;
     private JLabel lblNome;
     private JLabel lblTemperamento;
@@ -25,32 +25,51 @@ public class AnimalDetalhe extends JDialog {
     private JLabel lblNecessidadesValue;
     private JLabel lblDescricao;
     private JLabel lblDescricaoValue;
+    private JTabbedPane tabbedPane1;
+    private JLabel lblAbrigoNome;
+    private JLabel lblAbrigoTelefone;
+    private JLabel lblAbrigoEmail;
+    private JLabel lblAbrigoDocumento;
+    private JLabel lblAbrigoCep;
+    private JLabel lblAbrigoEndereco;
+    private JLabel lblAbrigoNumero;
+    private JLabel lblAbrigoComplemento;
+    private JLabel lblAbrigoBairro;
+    private JLabel lblAbrigoCidade;
+    private JLabel lblAbrigoEstado;
     private Animal animalDTO = new Animal();
 
-    public AnimalDetalhe(int codigo) {
+    public AnimalDetalhe(Animal animal) {
         setContentPane(contentPaneDetalheAnimal);
         setModal(true);
 
-        Animal animal = animalDTO.detalhe(codigo);
-
-        lblCodigo.setText("#"+String.valueOf(animal.getCodigo()));
         lblNomeValue.setText(animal.getNome());
-        lblAbrigoValue.setText("Abrigo");
         lblRacaValue.setText(animal.getRaca());
         lblIdadeValue.setText(String.valueOf(animal.getIdade()));
         lblTemperamentoValue.setText(animal.getTemperamento());
         lblSaudeValue.setText(animal.getHistoricoSaude());
         lblNecessidadesValue.setText(animal.getNecessidadesEspeciais());
         lblDescricaoValue.setText(animal.getDescricao());
-        System.out.println(animal.getNome());
+        lblAbrigoValue.setText(animal.getAbrigo().getNome());
 
-        buttonCancel.addActionListener(new ActionListener() {
+        lblAbrigoNome.setText(animal.getAbrigo().getNome());
+        lblAbrigoTelefone.setText(animal.getAbrigo().getTelefone());
+        lblAbrigoEmail.setText(animal.getAbrigo().getEmail());
+        lblAbrigoDocumento.setText(animal.getAbrigo().getDocumento());
+        lblAbrigoCep.setText(animal.getAbrigo().getCep());
+        lblAbrigoEndereco.setText(animal.getAbrigo().getEndereco());
+        lblAbrigoNumero.setText(String.valueOf(animal.getAbrigo().getNumero()));
+//        lblAbrigoComplemento.setText(animal.getAbrigo().getComplemento());
+//        lblAbrigoBairro.setText(animal.getAbrigo().getBairro());
+        lblAbrigoCidade.setText(animal.getAbrigo().getCidade());
+        lblAbrigoEstado.setText(animal.getAbrigo().getEstado());
+
+        buttonAdotar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onCancel();
             }
         });
 
-        // call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
@@ -58,7 +77,6 @@ public class AnimalDetalhe extends JDialog {
             }
         });
 
-        // call onCancel() on ESCAPE
         contentPaneDetalheAnimal.registerKeyboardAction(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onCancel();
@@ -68,7 +86,6 @@ public class AnimalDetalhe extends JDialog {
         setSize(600,700);
         setLocationRelativeTo(null);
         setVisible(true);
-        System.exit(0);
 
     }
 

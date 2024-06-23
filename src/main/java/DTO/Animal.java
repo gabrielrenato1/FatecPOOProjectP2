@@ -15,6 +15,7 @@ public class Animal {
     private String necessidades_especiais;
     private String descricao;
     private String foto;
+    private Abrigo abrigo;
 
     public Animal(){}
     public Animal(int codigo, String nome, String raca, int idade){
@@ -26,7 +27,7 @@ public class Animal {
 
     public Animal(int codigo, int codigoAbrigo, String nome, int idade, String raca, String temperamento, String historicoSaude, String necessidadesEspeciais, String descricao, String foto) {
         setCodigo(codigo);
-        //setCodigoAbrigo(codigo);
+        setAbrigo(codigo);
         setNome(nome);
         setIdade(idade);
         setRaca(raca);
@@ -107,6 +108,17 @@ public class Animal {
 
     public void setFoto(String foto) {
         this.foto = foto;
+    }
+
+    public Abrigo getAbrigo() {
+        return abrigo;
+    }
+
+    public void setAbrigo(int codigoAbrigo) {
+
+        Abrigo abrigoDTO = new Abrigo();
+        this.abrigo = abrigoDTO.detalhe(codigoAbrigo);
+
     }
 
     public boolean criar(){

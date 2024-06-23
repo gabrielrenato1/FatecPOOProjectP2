@@ -1,6 +1,9 @@
 package DTO;
 
+import DAO.AdocaoDAO;
+
 import java.util.Date;
+import java.util.List;
 
 public class Adocao {
 
@@ -8,15 +11,28 @@ public class Adocao {
     private Animal animal;
     private Abrigo abrigo;
     private Adotante adotante;
-    private int etapa;
-    private Date data;
+    private String etapa;
+    private String data;
     private String estado;
     private String cidade;
     private String endereco;
     private int numero;
-    private int cep;
+    private String cep;
 
     public Adocao(){}
+
+    public Adocao(int codigo, int codigoAnimal, int codigoAbrigo, String etapa, String data, String estado, String cidade, String endereco, int numero, String cep) {
+        this.setCodigo(codigo);
+        this.setAnimal(codigoAnimal);
+        this.setAbrigo(codigoAbrigo);
+        this.setEtapa(etapa);
+        this.setData(data);
+        this.setEstado(estado);
+        this.setCidade(cidade);
+        this.setEndereco(endereco);
+        this.setNumero(numero);
+        this.setCep(cep);
+    }
 
     public int getCodigo() {
         return codigo;
@@ -30,39 +46,48 @@ public class Adocao {
         return animal;
     }
 
-    public void setAnimal(Animal animal) {
-        this.animal = animal;
+    public void setAnimal(int codigoAnimal) {
+
+        Animal animalDTO = new Animal();
+        this.animal = animalDTO.detalhe(codigoAnimal);
+
     }
 
     public Abrigo getAbrigo() {
         return abrigo;
     }
 
-    public void setAbrigo(Abrigo abrigo) {
-        this.abrigo = abrigo;
+    public void setAbrigo(int codigoAbrigo) {
+
+        Abrigo abrigoDTO = new Abrigo();
+        this.abrigo = abrigoDTO.detalhe(codigoAbrigo);
+
     }
 
     public Adotante getAdotante() {
         return adotante;
     }
 
-    public void setAdotante(Adotante adotante) {
-        this.adotante = adotante;
+    public void setAdotante(int codigoAdotante) {
+
+        Adotante adotanteDTO = new Adotante();
+        this.adotante = adotanteDTO.detalhe(codigoAdotante);
+
     }
 
-    public int getEtapa() {
+    public String getEtapa() {
         return etapa;
     }
 
-    public void setEtapa(int etapa) {
+    public void setEtapa(String etapa) {
         this.etapa = etapa;
     }
 
-    public Date getData() {
+    public String getData() {
         return data;
     }
 
-    public void setData(Date data) {
+    public void setData(String data) {
         this.data = data;
     }
 
@@ -98,12 +123,19 @@ public class Adocao {
         this.numero = numero;
     }
 
-    public int getCep() {
+    public String getCep() {
         return cep;
     }
 
-    public void setCep(int cep) {
+    public void setCep(String cep) {
         this.cep = cep;
     }
 
+
+    public List<Adocao> listarPorAdotantes(int codigo) {
+
+        AdocaoDAO adocaoDAO = new AdocaoDAO();
+        return adocaoDAO.listarAdocoesAdotante(codigo);
+
+    }
 }

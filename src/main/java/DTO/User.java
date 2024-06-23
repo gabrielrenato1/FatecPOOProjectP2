@@ -7,12 +7,13 @@ public abstract class User implements Authenticate {
     private int codigo;
     private String nome;
     private String email;
+    private String documento;
     private String telefone;
     private String estado;
     private String cidade;
     private String endereco;
     private int numero;
-    private int cep;
+    private String cep;
 
     public User(){}
 
@@ -80,12 +81,19 @@ public abstract class User implements Authenticate {
         this.numero = numero;
     }
 
-    public int getCep() {
+    public String getCep() {
         return cep;
     }
 
-    public void setCep(int cep) {
+    public void setCep(String cep) {
         this.cep = cep;
     }
 
+    public String getDocumento() {
+        return documento;
+    }
+
+    public void setDocumento(String documento) {
+        this.documento = documento;
+    }
 }

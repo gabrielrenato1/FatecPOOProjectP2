@@ -34,7 +34,7 @@ public class AbrigoDAO{
                 stmt.setString(5, object.getCidade());
                 stmt.setString(6, object.getEndereco());
                 stmt.setInt(7, object.getNumero());
-                stmt.setInt(8, object.getCep());
+                stmt.setString(8, object.getCep());
 
                 success = stmt.execute();
 
@@ -62,28 +62,28 @@ public class AbrigoDAO{
 
             if(conexao.conectar()){
 
-                String sql = "SELECT * FROM abrigos WHERE codigo = ?";
+                String sql = "SELECT * FROM abrigos WHERE codigo = ? LIMIT 1";
 
                 PreparedStatement stmt = conexao.getConexao().prepareStatement(sql);
                 stmt.setInt(1, codigo);
 
                 ResultSet result = stmt.executeQuery();
 
-                while(result.next()){
+                result.next();
 
-                    abrigo = new Abrigo(
-                            result.getInt("codigo"),
-                            result.getInt("nome"),
-                            result.getString("email"),
-                            result.getInt("telefone"),
-                            result.getString("estado"),
-                            result.getString("cidade"),
-                            result.getString("endereco"),
-                            result.getString("numero"),
-                            result.getString("cep")
-                    );
+                abrigo = new Abrigo(
+                        result.getInt("codigo"),
+                        result.getString("nome"),
+                        result.getString("documento"),
+                        result.getString("email"),
+                        result.getString("telefone"),
+                        result.getString("estado"),
+                        result.getString("cidade"),
+                        result.getString("endereco"),
+                        result.getInt("numero"),
+                        result.getString("cep")
+                );
 
-                }
 
             }
 
@@ -119,7 +119,7 @@ public class AbrigoDAO{
                 stmt.setString(5, object.getCidade());
                 stmt.setString(6, object.getEndereco());
                 stmt.setInt(7, object.getNumero());
-                stmt.setInt(8, object.getCep());
+                stmt.setString(8, object.getCep());
                 stmt.setInt(9, codigo);
 
                 success = stmt.execute();
