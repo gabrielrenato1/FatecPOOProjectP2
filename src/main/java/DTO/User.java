@@ -1,8 +1,13 @@
 package DTO;
 
+import DAO.AutenticarDAO;
 import Interfaces.Authenticate;
+import jakarta.xml.bind.DatatypeConverter;
 
-public abstract class User implements Authenticate {
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+public class User implements Authenticate {
 
     private int codigo;
     private String nome;
@@ -14,8 +19,33 @@ public abstract class User implements Authenticate {
     private String endereco;
     private int numero;
     private String cep;
+    private String senha;
+    private String tipo;
 
     public User(){}
+
+    public User(int codigo, String email, String senha, String tipo) {
+        this.setCodigo(codigo);
+        this.setEmail(email);
+        this.setSenha(senha);
+        this.setTipo(tipo);
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
 
     public int getCodigo() {
         return codigo;
@@ -96,4 +126,30 @@ public abstract class User implements Authenticate {
     public void setDocumento(String documento) {
         this.documento = documento;
     }
+
+    public User autenticar(String email, String senha){
+
+        try {
+
+            AutenticarDAO autenticacao = new AutenticarDAO();
+            User user = autenticacao.emailExiste(email);
+
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(senha.getBytes());
+            byte[] digest = md.digest();
+            String myHash = DatatypeConverter.printHexBinary(digest).toUpperCase();
+
+            if(myHash.equals(user.getSenha().toUpperCase())){
+                return user;
+            }else{
+                return null;
+            }
+
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+
 }

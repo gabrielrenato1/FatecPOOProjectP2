@@ -27,7 +27,7 @@ public class Animal {
 
     public Animal(int codigo, int codigoAbrigo, String nome, int idade, String raca, String temperamento, String historicoSaude, String necessidadesEspeciais, String descricao, String foto) {
         setCodigo(codigo);
-        setAbrigo(codigo);
+        setAbrigo(codigoAbrigo);
         setNome(nome);
         setIdade(idade);
         setRaca(raca);

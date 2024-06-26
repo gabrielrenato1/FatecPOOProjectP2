@@ -2,6 +2,8 @@ package DTO;
 
 import DAO.AdocaoDAO;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -21,10 +23,11 @@ public class Adocao {
 
     public Adocao(){}
 
-    public Adocao(int codigo, int codigoAnimal, int codigoAbrigo, String etapa, String data, String estado, String cidade, String endereco, int numero, String cep) {
+    public Adocao(int codigo, int codigoAnimal, int codigoAbrigo, int codigoAdotante, String etapa, String data, String estado, String cidade, String endereco, int numero, String cep) {
         this.setCodigo(codigo);
         this.setAnimal(codigoAnimal);
         this.setAbrigo(codigoAbrigo);
+        this.setAdotante(codigoAdotante);
         this.setEtapa(etapa);
         this.setData(data);
         this.setEstado(estado);
@@ -84,7 +87,20 @@ public class Adocao {
     }
 
     public String getData() {
-        return data;
+
+        try {
+
+            SimpleDateFormat dateFormater = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = null;
+            date = dateFormater.parse(data);
+            dateFormater.applyPattern("dd/MM/yyyy");
+
+            return dateFormater.format(date);
+
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     public void setData(String data) {
@@ -131,6 +147,19 @@ public class Adocao {
         this.cep = cep;
     }
 
+    public boolean solicitarAdocao(Animal animal, Adotante adotante){
+
+        AdocaoDAO adocaoDAO = new AdocaoDAO();
+        return adocaoDAO.criar(animal, adotante);
+
+    }
+
+    public boolean solicitacaoExiste(Animal animal, Adotante adotante){
+
+        AdocaoDAO adocaoDAO = new AdocaoDAO();
+        return adocaoDAO.solicitacaoExiste(animal, adotante);
+
+    }
 
     public List<Adocao> listarPorAdotantes(int codigo) {
 
@@ -138,4 +167,5 @@ public class Adocao {
         return adocaoDAO.listarAdocoesAdotante(codigo);
 
     }
+
 }

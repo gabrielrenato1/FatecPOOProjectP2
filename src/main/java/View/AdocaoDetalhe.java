@@ -7,22 +7,21 @@ import DTO.Mensagem;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Objects;
 
-public class AnimalDetalhe extends JDialog {
-    private JPanel contentPaneDetalheAnimal;
-    private JButton buttonAdotar;
-    private JLabel lblCodigo;
+public class AdocaoDetalhe extends JDialog {
+    private JPanel contentPane;
+    private JTabbedPane tabbedPane1;
     private JLabel lblNomeValue;
-    private JLabel lblAbrigoValue;
-    private JLabel lblRacaValue;
-    private JLabel lblIdadeValue;
     private JLabel lblTemperamentoValue;
+    private JLabel lblRacaValue;
+    private JLabel lblAbrigoValue;
     private JLabel lblSaudeValue;
     private JLabel lblNecessidadesValue;
+    private JLabel lblIdadeValue;
     private JLabel lblDescricaoValue;
-    private JTabbedPane tabbedPane1;
     private JLabel lblAbrigoNome;
     private JLabel lblAbrigoTelefone;
     private JLabel lblAbrigoEmail;
@@ -32,6 +31,9 @@ public class AnimalDetalhe extends JDialog {
     private JLabel lblAbrigoNumero;
     private JLabel lblAbrigoCidade;
     private JLabel lblAbrigoEstado;
+    private JButton enviarButton;
+    private JTextField textMessage;
+    private JTextArea textAreaMessages;
     private JButton buttonVoltar;
     private JLabel lblNome;
     private JLabel lblTemperamento;
@@ -42,71 +44,36 @@ public class AnimalDetalhe extends JDialog {
     private JLabel lblDescricao;
     private JLabel lblAbrigoComplemento;
     private JLabel lblAbrigoBairro;
-    private JButton enviarButton;
-    private JTextField textMessage;
-    private JTextArea textAreaMessages;
-    private Animal animalDTO = new Animal();
 
-    private Adocao adocaoDTO = new Adocao();
-
-    private boolean solicitacaoExiste = false;
-
-    public AnimalDetalhe(Animal animal, Adotante adotante) {
-
-        setContentPane(contentPaneDetalheAnimal);
-
+    public AdocaoDetalhe(Adocao adocao) {
+        setContentPane(contentPane);
+        setModal(true);
         ImageIcon img = new ImageIcon("src/main/icons/paw-print.png");
         setIconImage(img.getImage());
 
-        setMensagens(animal, adotante);
-        setAnimalData(animal);
+        setAnimalData(adocao.getAnimal());
+        setMensagens(adocao.getAnimal(), adocao.getAdotante());
 
-        this.solicitacaoExiste = adocaoDTO.solicitacaoExiste(animal, adotante);
-
-        if(this.solicitacaoExiste){
-
-            buttonAdotar.setText("Adoção já solicitada");
-            buttonAdotar.setEnabled(false);
-
-        }
-
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                onCancel();
-            }
-        });
-
-        buttonAdotar.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                solicitarAdocao(animal, adotante);
-                super.mouseClicked(e);
-
-            }
-
-        });
+        setSize(600,700);
+        setLocationRelativeTo(null);
 
         buttonVoltar.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                onCancel();
+                dispose();
                 super.mouseClicked(e);
             }
         });
-
         enviarButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                sendMessage(animal, adotante);
+                sendMessage(adocao.getAnimal(), adocao.getAdotante());
                 super.mouseClicked(e);
             }
         });
 
-        setModal(true);
-        setSize(600,700);
-        setLocationRelativeTo(null);
         setVisible(true);
+
 
     }
 
@@ -131,25 +98,6 @@ public class AnimalDetalhe extends JDialog {
 //        lblAbrigoBairro.setText(animal.getAbrigo().getBairro());
         lblAbrigoCidade.setText(animal.getAbrigo().getCidade());
         lblAbrigoEstado.setText(animal.getAbrigo().getEstado());
-
-    }
-
-    private void solicitarAdocao(Animal animal, Adotante adotante){
-
-        if(!this.solicitacaoExiste){
-
-            boolean success = adocaoDTO.solicitarAdocao(animal, adotante);
-
-            if(success){
-                this.solicitacaoExiste = true;
-                buttonAdotar.setText("Adoção solicitada");
-                buttonAdotar.setEnabled(false);
-                JOptionPane.showMessageDialog(null, "Solicitação de adoção enviada");
-            }else{
-                JOptionPane.showMessageDialog(null, "Erro ao solicitar adoção");
-            }
-
-        }
 
     }
 
@@ -182,11 +130,5 @@ public class AnimalDetalhe extends JDialog {
 
     }
 
-    private void onCancel() {
-        this.solicitacaoExiste = false;
-        buttonAdotar.setEnabled(true);
-        buttonAdotar.setText("Adoção solicitada");
-        this.dispose();
-    }
 
 }

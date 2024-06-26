@@ -3,12 +3,16 @@ package View;
 import DTO.Adocao;
 import DTO.Adotante;
 import DTO.Animal;
+import DTO.User;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.*;
+import java.awt.event.*;
 import java.util.List;
+import java.util.Objects;
+
 
 public class Main extends JDialog {
 
@@ -29,24 +33,33 @@ public class Main extends JDialog {
     private JLabel lblStatus;
     private JTextField txtNumero;
     private JTable JtbAdocoes;
+    private JButton buttonVerAdocao;
+    private JPanel tabPets;
+    private JPanel tabAdocoes;
+    private JPanel tabPerfil;
     private Animal animalDTO = new Animal();
-    private List<Animal> listaAnimal = animalDTO.listar();
+    private List<Animal> listaAnimal = null;
     private Animal selectedAnimal = null;
-    private int codigoAdotante = 2;
+    private int codigoAdotante;
     private Adotante adotanteDTO = new Adotante();
-    Adotante adotante = adotanteDTO.detalhe(this.codigoAdotante);
-
+    private Adotante adotante = null;
     private Adocao adocaoDTO = new Adocao();
-    private List<Adocao> listaAdocoes = adocaoDTO.listarPorAdotantes(this.codigoAdotante);
+    private List<Adocao> listaAdocoes = null;
+    private Adocao selectedAdocao = null;
 
-
-    public Main() {
+    public Main(User usuario) {
         setContentPane(contentPane);
         setModal(true);
+        System.out.println(usuario.getCodigo());
+        if(Objects.equals(usuario.getTipo(), "adotante")){
+            codigoAdotante = usuario.getCodigo();
+            adotante = adotanteDTO.detalhe(this.codigoAdotante);
+        }
 
-        this.setAnimais();
-        this.setAdocoes();
-        this.setUser();
+        setAnimais();
+
+        ImageIcon img = new ImageIcon("src/main/icons/paw-print.png");
+        setIconImage(img.getImage());
 
         buttonUpdate.addMouseListener(new MouseAdapter() {
             @Override
@@ -56,12 +69,15 @@ public class Main extends JDialog {
             }
         });
 
+        JtbAnimais.setDefaultEditor(Object.class, null);
+        JtbAdocoes.setDefaultEditor(Object.class, null);
+
         JtbAnimais.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
 
                 try{
-                    selectedAnimal = listaAnimal.get(JtbAnimais.getSelectedRow()-1);
+                    selectedAnimal = listaAnimal.get(JtbAnimais.getSelectedRow());
                 }catch(Exception err){
                     selectedAnimal = null;
                 }
@@ -77,24 +93,76 @@ public class Main extends JDialog {
                 if(selectedAnimal == null){
                     JOptionPane.showMessageDialog(null, "Selecione um Pet, por favor");
                 }else{
-                    AnimalDetalhe detalheDialog = new AnimalDetalhe(selectedAnimal);
+                    new AnimalDetalhe(selectedAnimal, adotante);
                 }
 
                 super.mouseClicked(e);
             }
         });
 
+        JtbAdocoes.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+                try{
+                    selectedAdocao = listaAdocoes.get(JtbAdocoes.getSelectedRow());
+                }catch(Exception err){
+                    selectedAdocao = null;
+                }
+
+                super.mouseClicked(e);
+            }
+        });
+        buttonVerAdocao.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                new AdocaoDetalhe(selectedAdocao);
+                super.mouseClicked(e);
+            }
+        });
+        tabPets.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+
+                setAnimais();
+                super.componentShown(e);
+            }
+        });
+        tabAdocoes.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+                setAdocoes();
+                super.componentShown(e);
+            }
+        });
+        tabPerfil.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+                setUser();
+                super.componentShown(e);
+            }
+        });
+        JtbAnimais.addComponentListener(new ComponentAdapter() {
+        });
+        JtbAnimais.addKeyListener(new KeyAdapter() {
+        });
+
+        setSize(1200,700);
+        setLocationRelativeTo(null);
+        setVisible(true);
+        System.exit(0);
+
     }
 
     private void setAnimais(){
 
-        DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("codigo");
-        model.addColumn("nome");
-        model.addColumn("raca");
-        model.addColumn("idade");
+        listaAnimal = animalDTO.listar();
 
-        model.addRow(new Object[] {"Código", "Nome", "Raça", "Idade"});
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("Codigo");
+        model.addColumn("Nome");
+        model.addColumn("Raca");
+        model.addColumn("Idade");
 
         for (Animal value : listaAnimal) {
             model.addRow(new Object[]{
@@ -112,13 +180,14 @@ public class Main extends JDialog {
 
     private void setAdocoes(){
 
-        DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("codigo");
-        model.addColumn("nome");
-        model.addColumn("raca");
-        model.addColumn("idade");
+        listaAdocoes = adocaoDTO.listarPorAdotantes(codigoAdotante);
 
-        model.addRow(new Object[] {"Código", "Nome Pet", "Abrigo", "Status", "Data"});
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("Código");
+        model.addColumn("Nome Pet");
+        model.addColumn("Abrigo");
+        model.addColumn("Status");
+        model.addColumn("Data");
 
         for (Adocao value : listaAdocoes) {
             model.addRow(new Object[]{
@@ -133,7 +202,6 @@ public class Main extends JDialog {
 
         JtbAdocoes.setRowHeight(30);
         JtbAdocoes.setModel(model);
-
 
     }
 
@@ -169,14 +237,6 @@ public class Main extends JDialog {
             lblStatus.setText("Erro ao atualizar o usuário!");
         }
 
-    }
-
-    public static void main(String[] args) {
-        Main dialog = new Main();
-        dialog.setSize(1200,700);
-        dialog.setLocationRelativeTo(null);
-        dialog.setVisible(true);
-        System.exit(0);
     }
 
 }
