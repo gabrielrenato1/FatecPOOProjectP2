@@ -34,6 +34,7 @@ public class Main extends JDialog {
     private JPanel tabPerfil;
     private JTextField txtTelefone;
     private JButton buttonCriarPet;
+    private JButton buttonDeletarPet;
     private Animal animalDTO = new Animal();
     private Adocao adocaoDTO = new Adocao();
     private Abrigo abrigoDTO = new Abrigo();
@@ -51,6 +52,7 @@ public class Main extends JDialog {
 
         if(Objects.equals(usuario.getTipo(), "adotante")) {
             buttonCriarPet.setVisible(false);
+            buttonDeletarPet.setVisible(false);
             adotante = adotanteDTO.detalhe(usuario.getCodigo());
         }else{
             abrigo = abrigoDTO.detalhe(usuario.getCodigo());
@@ -150,6 +152,16 @@ public class Main extends JDialog {
             @Override
             public void mouseClicked(MouseEvent e) {
                 new AnimalCriar(abrigo);
+                super.mouseClicked(e);
+            }
+
+        });
+
+        buttonDeletarPet.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                animalDTO.deletar(selectedAnimal.getCodigo());
+                setAnimais();
                 super.mouseClicked(e);
             }
 
