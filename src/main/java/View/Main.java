@@ -22,8 +22,6 @@ public class Main extends JDialog {
     private JTextField txtEmail;
     private JTextField txtCep;
     private JTextField txtEndereco;
-    private JTextField txtComplemento;
-    private JTextField txtBairro;
     private JTextField txtCidade;
     private JTextField txtEstado;
     private JButton buttonUpdate;

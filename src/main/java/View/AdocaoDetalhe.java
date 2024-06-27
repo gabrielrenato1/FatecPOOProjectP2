@@ -43,8 +43,6 @@ public class AdocaoDetalhe extends JDialog {
     private JLabel lblNecessidades;
     private JLabel lblIdade;
     private JLabel lblDescricao;
-    private JLabel lblAbrigoComplemento;
-    private JLabel lblAbrigoBairro;
 
     public AdocaoDetalhe(Adocao adocao) {
         setContentPane(contentPane);

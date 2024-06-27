@@ -38,8 +38,6 @@ public class AnimalDetalhe extends JDialog {
     private JLabel lblNecessidades;
     private JLabel lblIdade;
     private JLabel lblDescricao;
-    private JLabel lblAbrigoComplemento;
-    private JLabel lblAbrigoBairro;
     private JButton enviarButton;
     private JTextField textMessage;
     private JTextArea textAreaMessages;

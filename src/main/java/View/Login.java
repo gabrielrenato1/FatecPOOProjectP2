@@ -21,10 +21,8 @@ public class Login extends JDialog {
     private JTextField txtCep;
     private JTextField txtEndereco;
     private JTextField txtNumero;
-    private JTextField txtComplemento;
     private JTextField txtCidade;
     private JTextField txtEstado;
-    private JTextField txtBairro;
     private JCheckBox checkAdotante;
     private JCheckBox checkAbrigo;
     private JLabel lblStatus;
