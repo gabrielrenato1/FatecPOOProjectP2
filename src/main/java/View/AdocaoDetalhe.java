@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
 import java.util.Objects;
 
 public class AdocaoDetalhe extends JDialog {
@@ -107,7 +108,15 @@ public class AdocaoDetalhe extends JDialog {
         textAreaMessages.setDisabledTextColor(Color.BLACK);
         Mensagem mensagemDTO = new Mensagem();
 
-        for (Mensagem value : mensagemDTO.listarMensagens(animal, adotante)) {
+        List<Mensagem> mensagens = null;
+
+        if(adotante != null){
+            mensagens = mensagemDTO.listarMensagensAdotante(animal, adotante);
+        }else{
+            mensagens = mensagemDTO.listarMensagensAbrigo(animal);
+        }
+
+        for (Mensagem value : mensagens) {
 
             String sender = Objects.equals(value.getRemetente(), "abrigo") ? value.getAbrigo().getNome() : value.getAdotante().getNome();
 

@@ -1,6 +1,9 @@
 package DTO;
 
 import DAO.AdotanteDAO;
+import jakarta.xml.bind.DatatypeConverter;
+
+import java.security.MessageDigest;
 
 //TODO: Adicionar campos Bairro e complemento
 
@@ -32,7 +35,20 @@ public class Adotante extends User{
 
     public boolean criar(){
 
+        try{
+
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(this.getSenha().getBytes());
+            byte[] digest = md.digest();
+            String myHash = DatatypeConverter.printHexBinary(digest).toUpperCase();
+            this.setSenha(myHash);
+
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
         AdotanteDAO dao = new AdotanteDAO();
+
         return dao.create(this);
 
     }
@@ -47,13 +63,6 @@ public class Adotante extends User{
 
         AdotanteDAO dao = new AdotanteDAO();
         return dao.atualizar(codigo, this);
-
-    }
-
-    public boolean deletar(int codigo){
-
-        AdotanteDAO dao = new AdotanteDAO();
-        return dao.deletar(codigo);
 
     }
 

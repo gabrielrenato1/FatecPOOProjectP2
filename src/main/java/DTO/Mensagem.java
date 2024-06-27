@@ -117,10 +117,17 @@ public class Mensagem {
 
     }
 
-    public List<Mensagem> listarMensagens(Animal animal, Adotante adotante){
+    public List<Mensagem> listarMensagensAdotante(Animal animal, Adotante adotante){
 
         MensagenDAO mensagemDAO = new MensagenDAO();
-        return mensagemDAO.listar(adotante.getCodigo(), animal.getCodigo());
+        return mensagemDAO.listarPorAdotante(adotante.getCodigo(), animal.getCodigo());
+
+    }
+
+    public List<Mensagem> listarMensagensAbrigo(Animal animal){
+
+        MensagenDAO mensagemDAO = new MensagenDAO();
+        return mensagemDAO.listarPorAbrigo(animal.getCodigo(), animal.getAbrigo().getCodigo());
 
     }
 

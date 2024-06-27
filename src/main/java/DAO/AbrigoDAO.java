@@ -36,7 +36,7 @@ public class AbrigoDAO{
                 stmt.setInt(7, object.getNumero());
                 stmt.setString(8, object.getCep());
 
-                success = stmt.execute();
+                success = stmt.executeUpdate() > 0;
 
             }
 
@@ -99,7 +99,7 @@ public class AbrigoDAO{
 
     }
 
-    public boolean atualizar(int codigo, Abrigo object){
+    public boolean atualizar(Abrigo object){
 
         boolean success = false;
 
@@ -120,41 +120,9 @@ public class AbrigoDAO{
                 stmt.setString(6, object.getEndereco());
                 stmt.setInt(7, object.getNumero());
                 stmt.setString(8, object.getCep());
-                stmt.setInt(9, codigo);
+                stmt.setInt(9, object.getCodigo());
 
-                success = stmt.execute();
-
-            }
-
-        }catch(SQLException err){
-            System.err.println(err.getMessage());
-            success = false;
-        }catch(Exception e){
-            System.err.println(e.getMessage());
-            success = false;
-        }finally{
-            conexao.desconectar();
-        }
-
-        return success;
-
-    }
-
-    public boolean deletar(int codigo){
-
-        boolean success = false;
-
-        try{
-
-            if(conexao.conectar()){
-
-                String sql = "DELETE FROM abrigos WHERE codigo = ?";
-
-                PreparedStatement stmt = conexao.getConexao().prepareStatement(sql);
-
-                stmt.setInt(1, codigo);
-
-                success = stmt.execute();
+                success = stmt.executeUpdate() > 0;
 
             }
 

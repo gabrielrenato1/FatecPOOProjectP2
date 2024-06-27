@@ -20,9 +20,7 @@ public class Abrigo extends User{
         setCep(cep);
     }
 
-    public Abrigo() {
-
-    }
+    public Abrigo() {}
 
     public boolean criar(){
 
@@ -38,17 +36,10 @@ public class Abrigo extends User{
 
     }
 
-    public boolean atualizar(int codigo){
+    public boolean atualizar(){
 
         AbrigoDAO dao = new AbrigoDAO();
-        return dao.atualizar(codigo, this);
-
-    }
-
-    public boolean deletar(int codigo){
-
-        AbrigoDAO dao = new AbrigoDAO();
-        return dao.deletar(codigo);
+        return dao.atualizar(this);
 
     }
 

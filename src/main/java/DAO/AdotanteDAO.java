@@ -21,8 +21,8 @@ public class AdotanteDAO{
 
             if(conexao.conectar()){
 
-                String sql = "INSERT INTO adotantes(nome, email, telefone, estado, cidade, endereco, numero, cep) " +
-                        "VALUES (?,?,?,?,?,?,?,?)";
+                String sql = "INSERT INTO adotantes(nome, email, telefone, estado, cidade, endereco, numero, cep, senha) " +
+                        "VALUES (?,?,?,?,?,?,?,?,?)";
 
                 PreparedStatement stmt = conexao.getConexao().prepareStatement(sql);
 
@@ -34,8 +34,9 @@ public class AdotanteDAO{
                 stmt.setString(6, object.getEndereco());
                 stmt.setInt(7, object.getNumero());
                 stmt.setString(8, object.getCep());
+                stmt.setString(9, object.getSenha());
 
-                success = stmt.execute();
+                success = stmt.executeUpdate() > 0;
 
             }
 
@@ -119,38 +120,6 @@ public class AdotanteDAO{
                 stmt.setInt(9, codigo);
 
                 success = stmt.executeUpdate() > 0;
-
-            }
-
-        }catch(SQLException err){
-            System.err.println(err.getMessage());
-            success = false;
-        }catch(Exception e){
-            System.err.println(e.getMessage());
-            success = false;
-        }finally{
-            conexao.desconectar();
-        }
-
-        return success;
-
-    }
-
-    public boolean deletar(int codigo){
-
-        boolean success = false;
-
-        try{
-
-            if(conexao.conectar()){
-
-                String sql = "DELETE FROM adotantes WHERE codigo = ?";
-
-                PreparedStatement stmt = conexao.getConexao().prepareStatement(sql);
-
-                stmt.setInt(1, codigo);
-
-                success = stmt.execute();
 
             }
 

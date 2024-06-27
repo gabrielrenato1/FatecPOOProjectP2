@@ -168,4 +168,10 @@ public class Adocao {
 
     }
 
+    public List<Adocao> listarPorAbrigo(int codigo) {
+
+        AdocaoDAO adocaoDAO = new AdocaoDAO();
+        return adocaoDAO.listarAdocoesAbrigo(codigo);
+
+    }
 }

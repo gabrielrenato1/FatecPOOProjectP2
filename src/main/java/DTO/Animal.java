@@ -135,6 +135,13 @@ public class Animal {
 
     }
 
+    public List<Animal> listarPorAbrigo(int codigoAbrigo) {
+
+        AnimalDAO dao = new AnimalDAO();
+        return dao.listarPorAbrigo(codigoAbrigo);
+
+    }
+
     public Animal detalhe(int codigo){
 
         AnimalDAO dao = new AnimalDAO();
@@ -155,6 +162,7 @@ public class Animal {
         return dao.deletar(codigo);
 
     }
+
 
 
 }

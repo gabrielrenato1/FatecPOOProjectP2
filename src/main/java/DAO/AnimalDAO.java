@@ -21,8 +21,8 @@ public class AnimalDAO{
 
             if(conexao.conectar()){
 
-                String sql = "INSERT INTO animais(nome, idade, raca, temperamento, historico_saude, necessidades_especiais, descricao, foto) " +
-                        "VALUES (?,?,?,?,?,?,?,?)";
+                String sql = "INSERT INTO animais(nome, idade, raca, temperamento, historico_saude, necessidades_especiais, descricao, foto, codigo_abrigo) " +
+                        "VALUES (?,?,?,?,?,?,?,?,?)";
 
                 PreparedStatement stmt = conexao.getConexao().prepareStatement(sql);
 
@@ -34,8 +34,9 @@ public class AnimalDAO{
                 stmt.setString(6, object.getNecessidadesEspeciais());
                 stmt.setString(7, object.getDescricao());
                 stmt.setString(8, object.getFoto());
+                stmt.setInt(9, object.getAbrigo().getCodigo());
 
-                success = stmt.execute();
+                success = stmt.executeUpdate() > 0;
 
             }
 
@@ -96,6 +97,55 @@ public class AnimalDAO{
         }
 
         return animal;
+
+    }
+
+    public List<Animal> listarPorAbrigo(int codigoAbrigo) {
+
+        List<Animal> lista = new ArrayList<Animal>();
+
+        try{
+
+            if(conexao.conectar()){
+
+                String sql = "SELECT * FROM animais WHERE codigo_abrigo = ? ORDER BY codigo DESC";
+
+                PreparedStatement stmt = conexao.getConexao().prepareStatement(sql);
+
+                stmt.setInt(1, codigoAbrigo);
+
+                ResultSet result = stmt.executeQuery();
+
+                while(result.next()){
+
+                    Animal animal = new Animal(
+                            result.getInt("codigo"),
+                            result.getInt("codigo_abrigo"),
+                            result.getString("nome"),
+                            result.getInt("idade"),
+                            result.getString("raca"),
+                            result.getString("temperamento"),
+                            result.getString("historico_saude"),
+                            result.getString("necessidades_especiais"),
+                            result.getString("descricao"),
+                            result.getString("foto")
+                    );
+
+                    lista.add(animal);
+
+                }
+
+            }
+
+        }catch(SQLException err){
+            System.err.println(err.getMessage());
+        }catch(Exception e){
+            System.err.println(e.getMessage());
+        }finally{
+            conexao.desconectar();
+        }
+
+        return lista;
 
     }
 
@@ -169,7 +219,7 @@ public class AnimalDAO{
                 stmt.setString(8, object.getFoto());
                 stmt.setInt(9, codigo);
 
-                success = stmt.execute();
+                success = stmt.executeUpdate() > 0;
 
             }
 

@@ -1,18 +1,16 @@
 package View;
 
-import DTO.Adocao;
-import DTO.Adotante;
-import DTO.Animal;
-import DTO.Mensagem;
+import DTO.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.List;
 import java.util.Objects;
 
 public class AnimalDetalhe extends JDialog {
     private JPanel contentPaneDetalheAnimal;
-    private JButton buttonAdotar;
+    private JButton buttonSolicitar;
     private JLabel lblCodigo;
     private JLabel lblNomeValue;
     private JLabel lblAbrigoValue;
@@ -45,15 +43,22 @@ public class AnimalDetalhe extends JDialog {
     private JButton enviarButton;
     private JTextField textMessage;
     private JTextArea textAreaMessages;
+    private JButton buttonEditarPet;
     private Animal animalDTO = new Animal();
 
     private Adocao adocaoDTO = new Adocao();
 
     private boolean solicitacaoExiste = false;
 
-    public AnimalDetalhe(Animal animal, Adotante adotante) {
+    public AnimalDetalhe(Animal animal, Adotante adotante, Abrigo abrigo) {
 
         setContentPane(contentPaneDetalheAnimal);
+
+        if(adotante != null) {
+            buttonEditarPet.setVisible(false);
+        }else{
+            buttonSolicitar.setVisible(false);
+        }
 
         ImageIcon img = new ImageIcon("src/main/icons/paw-print.png");
         setIconImage(img.getImage());
@@ -65,8 +70,8 @@ public class AnimalDetalhe extends JDialog {
 
         if(this.solicitacaoExiste){
 
-            buttonAdotar.setText("Adoção já solicitada");
-            buttonAdotar.setEnabled(false);
+            buttonSolicitar.setText("Adoção já solicitada");
+            buttonSolicitar.setEnabled(false);
 
         }
 
@@ -77,10 +82,12 @@ public class AnimalDetalhe extends JDialog {
             }
         });
 
-        buttonAdotar.addMouseListener(new MouseAdapter() {
+        buttonSolicitar.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+
                 solicitarAdocao(animal, adotante);
+
                 super.mouseClicked(e);
 
             }
@@ -99,6 +106,15 @@ public class AnimalDetalhe extends JDialog {
             @Override
             public void mouseClicked(MouseEvent e) {
                 sendMessage(animal, adotante);
+                super.mouseClicked(e);
+            }
+        });
+
+        buttonEditarPet.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                contentPaneDetalheAnimal.setFocusable(false);
+                new AnimalAtualizar(animal);
                 super.mouseClicked(e);
             }
         });
@@ -142,8 +158,8 @@ public class AnimalDetalhe extends JDialog {
 
             if(success){
                 this.solicitacaoExiste = true;
-                buttonAdotar.setText("Adoção solicitada");
-                buttonAdotar.setEnabled(false);
+                buttonSolicitar.setText("Adoção solicitada");
+                buttonSolicitar.setEnabled(false);
                 JOptionPane.showMessageDialog(null, "Solicitação de adoção enviada");
             }else{
                 JOptionPane.showMessageDialog(null, "Erro ao solicitar adoção");
@@ -159,7 +175,15 @@ public class AnimalDetalhe extends JDialog {
         textAreaMessages.setDisabledTextColor(Color.BLACK);
         Mensagem mensagemDTO = new Mensagem();
 
-        for (Mensagem value : mensagemDTO.listarMensagens(animal, adotante)) {
+        List<Mensagem> mensagens = null;
+
+        if(adotante != null){
+            mensagens = mensagemDTO.listarMensagensAdotante(animal, adotante);
+        }else{
+            mensagens = mensagemDTO.listarMensagensAbrigo(animal);
+        }
+
+        for (Mensagem value : mensagens) {
 
             String sender = Objects.equals(value.getRemetente(), "abrigo") ? value.getAbrigo().getNome() : value.getAdotante().getNome();
 
@@ -184,8 +208,8 @@ public class AnimalDetalhe extends JDialog {
 
     private void onCancel() {
         this.solicitacaoExiste = false;
-        buttonAdotar.setEnabled(true);
-        buttonAdotar.setText("Adoção solicitada");
+        buttonSolicitar.setEnabled(true);
+        buttonSolicitar.setText("Adoção solicitada");
         this.dispose();
     }
 

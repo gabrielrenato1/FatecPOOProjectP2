@@ -55,7 +55,7 @@ public class MensagenDAO {
 
     }
 
-    public List<Mensagem> listar(int codigoAdotante, int codigoAnimal){
+    public List<Mensagem> listarPorAdotante(int codigoAdotante, int codigoAnimal){
 
         List<Mensagem> lista = new ArrayList<Mensagem>();
 
@@ -102,4 +102,51 @@ public class MensagenDAO {
 
     }
 
+    public List<Mensagem> listarPorAbrigo(int codigoAnimal, int codigoAbrigo) {
+
+
+        List<Mensagem> lista = new ArrayList<Mensagem>();
+
+        try{
+
+            if(conexao.conectar()){
+
+                String sql = "SELECT * FROM mensagens WHERE codigo_abrigo = ? AND codigo_animal = ? ORDER BY codigo ASC";
+
+                PreparedStatement stmt = conexao.getConexao().prepareStatement(sql);
+                stmt.setInt(1, codigoAbrigo);
+                stmt.setInt(2, codigoAnimal);
+
+                ResultSet result = stmt.executeQuery();
+
+                while(result.next()){
+
+                    Mensagem mensagem = new Mensagem(
+                            result.getInt("codigo"),
+                            result.getInt("codigo_abrigo"),
+                            result.getInt("codigo_adotante"),
+                            result.getInt("codigo_animal"),
+                            result.getString("remetente"),
+                            result.getString("conteudo"),
+                            result.getString("data"),
+                            result.getString("hora")
+                    );
+
+                    lista.add(mensagem);
+
+                }
+
+            }
+
+        }catch(SQLException err){
+            System.err.println(err.getMessage());
+        }catch(Exception e){
+            System.err.println(e.getMessage());
+        }finally{
+            conexao.desconectar();
+        }
+
+        return lista;
+
+    }
 }
